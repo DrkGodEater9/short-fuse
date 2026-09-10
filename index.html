@@ -23,6 +23,10 @@
   --naranja:#D47C1A;
   --verde:#1E7A4A;
   --gris:#7A6E5E;
+  --abc-col:2;
+  --abc-sz:30px;
+  --abc-gap:5px;
+  --abc-pad:8px;
 }
 *{box-sizing:border-box}
 html,body{height:100%;min-height:100%}
@@ -36,22 +40,19 @@ body{
   -webkit-tap-highlight-color:transparent;
   min-height:100vh;
 }
-/* textura de papel viejo suave */
 body::after{
   content:"";position:fixed;inset:0;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   opacity:.6;mix-blend-mode:multiply;
 }
-
 /* ---- layout principal ---- */
 .caja{
   display:flex;
   align-items:flex-start;
-  gap:16px;
+  gap:14px;
   width:100%;
-  max-width:760px;
+  max-width:800px;
 }
-
 /* ---- carta / modal ---- */
 .etiqueta{
   flex:1;min-width:0;
@@ -63,7 +64,6 @@ body::after{
   padding:34px 32px 30px;
   box-shadow:6px 6px 0 var(--tinta);
 }
-/* borde interior decorativo */
 .etiqueta::before{
   content:"";position:absolute;inset:7px;
   border:1px solid rgba(192,49,30,.4);
@@ -75,53 +75,36 @@ body::after{
   30%,70%{transform:translateX(5px)}
   50%{transform:translateX(-5px)}
 }
-.etiqueta.arde{
-  box-shadow:6px 6px 0 var(--tinta), 0 0 0 3px rgba(212,124,26,.6);
-}
+.etiqueta.arde{box-shadow:6px 6px 0 var(--tinta),0 0 0 3px rgba(212,124,26,.6)}
 
-/* ---- sidebar letras ---- */
+/* ---- sidebar letras: siempre 2 columnas ---- */
 .abc-sidebar{
   display:none;
-  flex-direction:column;
   flex-shrink:0;
-  width:70px;
-  gap:4px;
-  padding:6px;
-  background:rgba(242,232,208,.06);
-  border:1px solid rgba(242,232,208,.12);
-  border-radius:3px;
-  align-self:stretch;
-}
-.abc-sidebar.visible{display:flex}
-/* 2 columnas dentro del sidebar */
-.abc-sidebar{
-  display:none;
-  flex-direction:row;
-  flex-wrap:wrap;
-  align-content:flex-start;
-  flex-shrink:0;
-  width:72px;
-  gap:4px;
-  padding:8px 6px;
+  /* ancho = 2 celdas + 1 gap + 2 paddings laterales */
+  width:calc(var(--abc-col) * var(--abc-sz) + (var(--abc-col) - 1) * var(--abc-gap) + var(--abc-pad) * 2);
+  padding:var(--abc-pad);
   border:1px solid rgba(242,232,208,.15);
   border-radius:3px;
   align-self:stretch;
+  grid-template-columns:repeat(var(--abc-col), var(--abc-sz));
+  gap:var(--abc-gap);
+  align-content:flex-start;
+  justify-content:center;
 }
-.abc-sidebar.visible{display:flex}
+.abc-sidebar.visible{display:grid}
 .abc-sidebar i{
   font-style:normal;
-  width:28px;height:28px;line-height:28px;
-  text-align:center;font-size:12px;font-weight:700;
+  width:var(--abc-sz);
+  height:var(--abc-sz);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;
   border-radius:3px;
   background:rgba(255,255,255,.07);
-  color:rgba(255,255,255,.28);
+  color:rgba(255,255,255,.3);
   text-transform:uppercase;
-  flex-shrink:0;
 }
-.abc-sidebar i.hecha{
-  background:var(--rojo);
-  color:#fff;
-}
+.abc-sidebar i.hecha{background:var(--rojo);color:#fff}
 
 /* ---- cabecera ---- */
 .cabecera{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
@@ -225,15 +208,15 @@ h1 em{font-style:normal;color:var(--rojo)}
 .oculto{display:none!important}
 :focus-visible{outline:2px solid var(--naranja);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media (max-width:600px){
+
+/* responsive: las variables CSS hacen que el sidebar se adapte solo */
+@media (max-width:620px){
+  :root{--abc-sz:26px;--abc-gap:4px;--abc-pad:6px}
   .caja{gap:10px}
   .etiqueta{padding:26px 20px 24px}
-  .abc-sidebar{width:62px}
-  .abc-sidebar i{width:25px;height:25px;line-height:25px;font-size:11px}
 }
-@media (max-width:400px){
-  .abc-sidebar{width:54px}
-  .abc-sidebar i{width:21px;height:21px;line-height:21px;font-size:10px}
+@media (max-width:420px){
+  :root{--abc-sz:22px;--abc-gap:3px;--abc-pad:5px}
   .etiqueta{padding:22px 14px 20px}
 }
 </style>
